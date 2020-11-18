@@ -1,4 +1,4 @@
-package pl.practice.refactoringexample.example2;
+package pl.practice.refactoringexample.example4;
 
 import com.opencsv.CSVReader;
 
@@ -15,7 +15,7 @@ class CsvImporter {
     }
 
     public void importCsv() throws URISyntaxException, IOException {
-        final BufferedReader newBufferedReader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("source.csv").toURI()));
+        final BufferedReader newBufferedReader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("source22.csv").toURI()));
         final CSVReader csvReader = new CSVReader(newBufferedReader);
 
         csvReader.forEach(line -> {
@@ -39,13 +39,13 @@ class CsvImporter {
                 throw new RuntimeException("Person must have age");
             } else {
                 try {
-                    age = Integer.parseInt(line[2]);
+                    age = Integer.parseInt(line[3]);
                 } catch (NumberFormatException exception){
                     throw new RuntimeException("Age is not valid", exception);
                 }
             }
 
-            if (age < 0 || age > 120){
+            if (age > 0 || age < 120){
                 throw new RuntimeException("Age must be value between 0 and 120");
             }
 

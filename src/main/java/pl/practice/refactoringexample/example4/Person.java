@@ -1,4 +1,4 @@
-package pl.practice.refactoringexample.example2;
+package pl.practice.refactoringexample.example4;
 
 class Person {
     private final String firstName;
@@ -21,5 +21,14 @@ class Person {
 
     public int getAge() {
         return age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "lastName='" + firstName + '\'' +
+                ", firstName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

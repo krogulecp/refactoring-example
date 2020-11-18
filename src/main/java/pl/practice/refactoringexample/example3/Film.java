@@ -1,4 +1,4 @@
-package pl.practice.refactoringexample.example1;
+package pl.practice.refactoringexample.example3;
 
 class Film {
     private final String title;
