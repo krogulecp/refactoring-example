@@ -16,19 +16,19 @@ class FilmService {
     }
 
     public List<Film> findFilmsLongerThan120minutes() throws URISyntaxException, IOException {
-        Path filmsDbPath = Paths.get(ClassLoader.getSystemResource("films11.db").toURI());
+        Path filmsDbPath = Paths.get(ClassLoader.getSystemResource("films2.db").toURI());
         List<String> allFilmLines = Files.readAllLines(filmsDbPath);
 
         final List<Film> foundFilms = new ArrayList<>();
 
         for (var line : allFilmLines){
-            String[] lineParts = line.split(" ");
+            String[] lineParts = line.split(",");
             if (lineParts.length != 3){
                 throw new RuntimeException("Invalid film record");
             }
 
             if (!lineParts[2].isEmpty() && Integer.parseInt(lineParts[2]) > 120) {
-                foundFilms.add(new Film(lineParts[2], Integer.parseInt(lineParts[3])));
+                foundFilms.add(new Film(lineParts[1], Integer.parseInt(lineParts[2])));
             }
         }
 
