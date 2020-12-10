@@ -18,8 +18,8 @@ class CsvImporter {
         final BufferedReader newBufferedReader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("source.csv").toURI()));
         try(final CSVReader csvReader = new CSVReader(newBufferedReader)){
             csvReader.forEach(line -> {
-                String firstName = prepareName(line, 0, "firstName");
-                String lastName = prepareName(line, 1, "lastName");
+                String firstName = prepareStringField(line[0], "firstName");
+                String lastName = prepareStringField(line[1], "lastName");
                 int age = AgeParser.parse(line[2]);
                 final Person person = new Person(firstName, lastName, age);
                 System.out.println(person.getFirstName() + " " + person.getLastName() + " " + person.getAge());
@@ -30,12 +30,12 @@ class CsvImporter {
 
     }
 
-    private String prepareName(String[] line, int index, String fieldName) {
+    private String prepareStringField(String fieldToParse, String fieldName) {
         String firstName;
-        if (line[index] == null || line[index].isEmpty()){
+        if (fieldToParse == null || fieldToParse.isEmpty()){
             throw new RuntimeException("Person must have " + fieldName);
         } else {
-            firstName = line[index];
+            firstName = fieldToParse;
         }
         return firstName;
     }
