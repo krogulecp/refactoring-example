@@ -16,43 +16,27 @@ class CsvImporter {
 
     public void importCsv() throws URISyntaxException, IOException {
         final BufferedReader newBufferedReader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("source.csv").toURI()));
-        final CSVReader csvReader = new CSVReader(newBufferedReader);
+        try(final CSVReader csvReader = new CSVReader(newBufferedReader)){
+            csvReader.forEach(line -> {
+                String firstName = prepareName(line, 0, "firstName");
+                String lastName = prepareName(line, 1, "lastName");
+                int age = AgeParser.parse(line[2]);
+                final Person person = new Person(firstName, lastName, age);
+                System.out.println(person.getFirstName() + " " + person.getLastName() + " " + person.getAge());
+            });
+        } catch (Exception e){
+            System.out.println("Problem with reading file");
+        }
 
-        csvReader.forEach(line -> {
-            String firstName = null;
-            String lastName = null;
-            int age = 0;
+    }
 
-            if (line[0] == null || line[0].isEmpty()){
-                throw new RuntimeException("Person must have firstName");
-            } else {
-                firstName = line[0];
-            }
-
-            if (line[1] == null || line[1].isEmpty()){
-                throw new RuntimeException("Person must have lastName");
-            } else {
-                lastName = line[1];
-            }
-
-            if (line[2] == null || line[2].isEmpty()){
-                throw new RuntimeException("Person must have age");
-            } else {
-                try {
-                    age = Integer.parseInt(line[2]);
-                } catch (NumberFormatException exception){
-                    throw new RuntimeException("Age is not valid", exception);
-                }
-            }
-
-            if (age < 0 || age > 120){
-                throw new RuntimeException("Age must be value between 0 and 120");
-            }
-
-            final Person person = new Person(firstName, lastName, age);
-
-            System.out.println(person.getFirstName() + " " + person.getLastName() + " " + person.getAge());
-
-        });
+    private String prepareName(String[] line, int index, String fieldName) {
+        String firstName;
+        if (line[index] == null || line[index].isEmpty()){
+            throw new RuntimeException("Person must have " + fieldName);
+        } else {
+            firstName = line[index];
+        }
+        return firstName;
     }
 }
