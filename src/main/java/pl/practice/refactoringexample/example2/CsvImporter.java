@@ -30,7 +30,7 @@ class CsvImporter {
 
         final Person person = new Person(firstName, lastName, age);
 
-        System.out.println(person.getFirstName() + " " + person.getLastName() + " " + person.getAge());
+        System.out.println(person);
     }
 
     private String parseFirstName(String firstName) {
