@@ -11,13 +11,16 @@ import java.util.stream.Collectors;
 
 class FilmService {
 
+    public static final String FILMS_FILE = "films.db";
+
     public static void main(String[] args) throws IOException, URISyntaxException {
-        System.out.println(new FilmService().findFilmsLongerThan120minutes().stream().map(film -> film.getTitle() + " " + film.getLength()).collect(Collectors.joining("\n")));
+        System.out.println(new FilmService().findFilmsLongerThan(120).stream()
+            .map(film -> film.getTitle() + " " + film.getLength())
+            .collect(Collectors.joining("\n")));
     }
 
-    public List<Film> findFilmsLongerThan120minutes() throws URISyntaxException, IOException {
-        Path filmsDbPath = Paths.get(ClassLoader.getSystemResource("films.db").toURI());
-        List<String> allFilmLines = Files.readAllLines(filmsDbPath);
+    public List<Film> findFilmsLongerThan(int filmLength) throws URISyntaxException, IOException {
+        List<String> allFilmLines = getFilmLines();
 
         final List<Film> foundFilms = new ArrayList<>();
 
@@ -27,11 +30,17 @@ class FilmService {
                 throw new RuntimeException("Invalid film record");
             }
 
-            if (!lineParts[2].isEmpty() && Integer.parseInt(lineParts[2]) > 120) {
+            if (!lineParts[2].isEmpty() && Integer.parseInt(lineParts[2]) > filmLength) {
                 foundFilms.add(new Film(lineParts[1], Integer.parseInt(lineParts[2])));
             }
         }
 
         return foundFilms;
+    }
+
+    private List<String> getFilmLines() throws URISyntaxException, IOException {
+        Path filmsDbPath = Paths.get(ClassLoader.getSystemResource(FILMS_FILE).toURI());
+
+        return Files.readAllLines(filmsDbPath);
     }
 }

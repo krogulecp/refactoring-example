@@ -18,41 +18,49 @@ class CsvImporter {
         final BufferedReader newBufferedReader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("source.csv").toURI()));
         final CSVReader csvReader = new CSVReader(newBufferedReader);
 
-        csvReader.forEach(line -> {
-            String firstName = null;
-            String lastName = null;
-            int age = 0;
+        csvReader.forEach(this::showPersonInfo);
+    }
 
-            if (line[0] == null || line[0].isEmpty()){
-                throw new RuntimeException("Person must have firstName");
-            } else {
-                firstName = line[0];
-            }
+    private void showPersonInfo(String[] line) {
+        String firstName = parseFirstName(line[0]);
+        String lastName = parseLastName(line[1]);
+        int age = parseAge(line[2]);
 
-            if (line[1] == null || line[1].isEmpty()){
-                throw new RuntimeException("Person must have lastName");
-            } else {
-                lastName = line[1];
-            }
+        checkAge(age);
 
-            if (line[2] == null || line[2].isEmpty()){
-                throw new RuntimeException("Person must have age");
-            } else {
-                try {
-                    age = Integer.parseInt(line[2]);
-                } catch (NumberFormatException exception){
-                    throw new RuntimeException("Age is not valid", exception);
-                }
-            }
+        final Person person = new Person(firstName, lastName, age);
 
-            if (age < 0 || age > 120){
-                throw new RuntimeException("Age must be value between 0 and 120");
-            }
+        System.out.println(person.getFirstName() + " " + person.getLastName() + " " + person.getAge());
+    }
 
-            final Person person = new Person(firstName, lastName, age);
+    private String parseFirstName(String firstName) {
+        if (firstName == null || firstName.isEmpty()) {
+            throw new RuntimeException("Person must have firstName");
+        }
+        return firstName;
+    }
 
-            System.out.println(person.getFirstName() + " " + person.getLastName() + " " + person.getAge());
+    private String parseLastName(String lastName) {
+        if (lastName == null || lastName.isEmpty()) {
+            throw new RuntimeException("Person must have lastName");
+        }
+        return lastName;
+    }
 
-        });
+    private int parseAge(String ageString) {
+        if (ageString == null || ageString.isEmpty()) {
+            throw new RuntimeException("Person must have age");
+        }
+        try {
+            return Integer.parseInt(ageString);
+        } catch (NumberFormatException exception) {
+            throw new RuntimeException("Age is not valid", exception);
+        }
+    }
+
+    private void checkAge(int age) {
+        if (age < 0 || age > 120) {
+            throw new RuntimeException("Age must be value between 0 and 120");
+        }
     }
 }
