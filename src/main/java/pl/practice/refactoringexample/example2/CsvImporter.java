@@ -12,6 +12,11 @@ import java.nio.file.Paths;
 class CsvImporter {
 
     public static final String SOURCE = "source.csv";
+    public static final String PERSON_MUST_HAVE_FIRST_NAME_INFO = "Person must have firstName";
+    public static final String AGE_MUST_BE_VALUE_BETWEEN_0_AND_120_INFO = "Age must be value between 0 and 120";
+    public static final String PERSON_MUST_HAVE_AGE_INFO = "Person must have age";
+    public static final String AGE_IS_NOT_VALID_INFO = "Age is not valid";
+    public static final String PERSON_MUST_HAVE_LAST_NAME_INFO = "Person must have lastName";
 
     public static void main(String[] args) throws IOException, URISyntaxException {
         new CsvImporter().importCsv();
@@ -31,7 +36,7 @@ class CsvImporter {
         String lastName = null;
         int age = 0;
 
-        firstName = getFirstName(line, 0, "Person must have firstName");
+        firstName = getFirstName(line, 0, PERSON_MUST_HAVE_FIRST_NAME_INFO);
         lastName = getLastName(line);
         age = getAge(line);
         checkAgeRange(age);
@@ -45,19 +50,19 @@ class CsvImporter {
 
     private void checkAgeRange(int age) {
         if (age < 0 || age > 120){
-            throw new RuntimeException("Age must be value between 0 and 120");
+            throw new RuntimeException(AGE_MUST_BE_VALUE_BETWEEN_0_AND_120_INFO);
         }
     }
 
     private int getAge(String[] line) {
         int age;
         if (line[2] == null || line[2].isEmpty()){
-            throw new RuntimeException("Person must have age");
+            throw new RuntimeException(PERSON_MUST_HAVE_AGE_INFO);
         } else {
             try {
                 age = Integer.parseInt(line[2]);
             } catch (NumberFormatException exception){
-                throw new RuntimeException("Age is not valid", exception);
+                throw new RuntimeException(AGE_IS_NOT_VALID_INFO, exception);
             }
         }
         return age;
@@ -66,7 +71,7 @@ class CsvImporter {
     private String getLastName(String[] line) {
         String lastName;
         if (line[1] == null || line[1].isEmpty()){
-            throw new RuntimeException("Person must have lastName");
+            throw new RuntimeException(PERSON_MUST_HAVE_LAST_NAME_INFO);
         } else {
             lastName = line[1];
         }
