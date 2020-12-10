@@ -11,11 +11,11 @@ class Person {
         this.age = age;
     }
 
-    public String getFirstName() {
+    public String getFName() {
         return firstName;
     }
 
-    public String getLastName() {
+    public String getLName() {
         return lastName;
     }
 
