@@ -6,19 +6,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class CsvImporter {
+
+    public static final String SOURCE_CSV = "source.csv";
 
     public static void main(String[] args) throws IOException, URISyntaxException {
         new CsvImporter().importCsv();
     }
 
     public void importCsv() throws URISyntaxException, IOException {
-        final BufferedReader newBufferedReader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource("source.csv").toURI()));
+        final BufferedReader newBufferedReader = Files.newBufferedReader(getDataFile());
         final CSVReader csvReader = new CSVReader(newBufferedReader);
 
         csvReader.forEach(this::showPersonInfo);
+    }
+
+    private Path getDataFile() throws URISyntaxException {
+        return Paths.get(ClassLoader.getSystemResource(SOURCE_CSV).toURI());
     }
 
     private void showPersonInfo(String[] line) {
